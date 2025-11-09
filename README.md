@@ -1,11 +1,3 @@
-Alright bro, let's crack this\! 🚀
-
-You wanted **very very very minimal code** to get the **exact output**. We'll use every C++ trick in the book—headers, `using namespace`, ternary operators, and string `find` is gonna be our best friend.
-
-Let's win this thing\!
-
------
-
 ## TOPIC 1: TIME COMPLEXITY
 
 ### CE1 - Question 1: Calculate Area
