@@ -955,273 +955,196 @@ Item: 1 2 3 4 5, Profit: 12 32 40 30 50, Weight: 4 8 2 6 1
 
 ---
 
-## TOPIC 4: STRING ALGORITHMS
+Sure 👍 here’s the **complete version directly in chat**, with **shortest easy C++ codes** (using `substr`) and **detailed walkthroughs** for *all* the questions you sent.
 
-### CE1 - Question 1 & 2: Naive Pattern Matching
+---
 
-**Problem:** Find all occurrences of pattern in text using simple string search.
+## 🧩 **TOPIC 4 — STRING ALGORITHMS**
 
-**Input Format:**
-- Line 1: String `text` (the text to search in)
-- Line 2: String `pattern` (the pattern to find)
+---
 
-**Output Format:**
-- For each match: "Pattern found at index {position}"
+### **CE1 – Question 1 & 2: Naive Pattern Matching**
+
+**Problem:** Find all occurrences of `pattern` in `text`.
+
+#### ✅ Code:
 
 ```cpp
 #include <bits/stdc++.h>
 using namespace std;
 int main() {
-    string t, p; getline(cin, t); getline(cin, p);
-    size_t pos = t.find(p);
-    while (pos != string::npos) {
-        cout << "Pattern found at index " << pos << endl;
-        pos = t.find(p, pos + 1);
-    }
+    string t, p;
+    getline(cin, t);
+    getline(cin, p);
+    for (size_t i = 0; i + p.size() <= t.size(); ++i)
+        if (t.substr(i, p.size()) == p)
+            cout << "Pattern found at index " << i << '\n';
 }
 ```
 
-**Detailed Walkthrough:**
-1. Read text `t` and pattern `p` using `getline` (handles spaces)
-2. **Search algorithm:**
-   - Use `t.find(p)` to find first occurrence
-   - Returns index if found, `string::npos` if not found
-3. **Loop through all occurrences:**
-   - While position is valid (not npos):
-     - Print "Pattern found at index {pos}"
-     - Search again starting from pos+1 to find overlapping matches
-4. **Overlapping matches:** Starting from pos+1 allows finding patterns like "AA" in "AAA" (at positions 0 and 1)
+#### 🧠 Walkthrough:
 
-**Example:** text="AABAACAADAABAAABAA", pattern="AABA"
-- First find at index 0: "AABA..."
-- Search from index 1, find at index 9: "...DAABAA..."
-- Search from index 10, find at index 13: "...AABAAA..."
-- Output: Pattern found at index 0, 9, 13
-
----
-
-### CE2 - Question 1: Rabin-Karp (Count)
-
-**Problem:** Count total occurrences of pattern in text.
-
-**Input Format:**
-- Line 1: String `text`
-- Line 2: String `pattern`
-
-**Output Format:**
-- Line 1: Integer count of occurrences
-
-```cpp
-#include <bits/stdc++.h>
-using namespace std;
-int main() {
-    string t, p; getline(cin, t); getline(cin, p);
-    int c = 0;
-    size_t pos = t.find(p);
-    while (pos != string::npos) {
-        c++;
-        pos = t.find(p, pos + 1);
-    }
-    cout << c << endl;
-}
-```
-
-**Detailed Walkthrough:**
-1. Read text and pattern using `getline`
-2. Initialize counter `c = 0`
-3. **Count matches:**
-   - Find first occurrence
-   - While match found:
-     - Increment counter
-     - Search from next position (pos+1)
-4. Print final count
-
-**Example:** text="hello hello world hello", pattern="hello"
-- Find at 0: count=1
-- Find at 6: count=2
-- Find at 18: count=3
-- Output: 3
-
----
-
-### CE2 - Question 2: Rabin-Karp (Find Indices)
-
-**Problem:** Find and store all occurrence indices, print them or -1 if none.
-
-**Input Format:**
-- Line 1: String `text`
-- Line 2: String `pattern`
-
-**Output Format:**
-- All indices space-separated, OR -1 if no matches
-
-```cpp
-#include <bits/stdc++.h>
-using namespace std;
-int main() {
-    string t, p; getline(cin, t); getline(cin, p);
-    vector<int> v;
-    size_t pos = t.find(p);
-    while (pos != string::npos) {
-        v.push_back(pos);
-        pos = t.find(p, pos + 1);
-    }
-    if (v.empty()) cout << -1 << endl;
-    else {
-        for (int i : v) cout << i << " ";
-        cout << endl;
-    }
-}
-```
-
-**Detailed Walkthrough:**
-1. Read text and pattern
-2. Create vector `v` to store indices
-3. **Find all matches:**
-   - Search for pattern repeatedly
-   - Store each found index in vector
-4. **Output results:**
-   - If vector empty: print -1 (no matches)
-   - Otherwise: print all indices space-separated
-
-**Example:** text="aaaaa", pattern="aa"
-- Find at 0: store 0
-- Find at 1: store 1
-- Find at 2: store 2
-- Find at 3: store 3
-- Output: 0 1 2 3
-
----
-
-### CE3 - Question 1: Z Algorithm (Count)
-
-**Problem:** Count pattern occurrences with multiple test cases.
-
-**Input Format:**
-- Line 1: Integer `T` (number of test cases)
-- For each test case:
-  - Line 1: Two integers `N` and `M` (lengths)
-  - Line 2: String `S` (text)
-  - Line 3: String `P` (pattern)
-
-**Output Format:**
-- For each test case: count of occurrences (one per line)
-
-```cpp
-#include <bits/stdc++.h>
-using namespace std;
-void solve() {
-    int n, m; cin >> n >> m;
-    string s, p; cin >> s >> p;
-    int c = 0;
-    size_t pos = s.find(p);
-    while (pos != string::npos) {
-        c++;
-        pos = s.find(p, pos + 1);
-    }
-    cout << c << endl;
-}
-int main() { int t; cin >> t; while (t--) solve(); }
-```
-
-**Detailed Walkthrough:**
-1. Read number of test cases `T`
-2. **For each test case:**
-   - Read lengths N (text) and M (pattern)
-   - Read text string S and pattern P
-   - Count occurrences using same algorithm
-   - Print count
-3. **Pattern matching:** Standard find loop with counter
+* Reads text `t` and pattern `p`.
+* Loops through all possible start positions in `t`.
+* Compares substring of length `p.size()` with pattern.
+* Prints match index if equal.
+* Supports **overlapping matches** (e.g., `AA` in `AAA` → index 0, 1).
 
 **Example:**
-- Test 1: S="ababaab", P="ab" → 3 occurrences
-- Test 2: S="abab", P="a" → 2 occurrences
+`t = "AABAACAADAABAAABAA"`, `p = "AABA"`
+→ Output: `0 9 13`
 
 ---
 
-### CE3 - Question 2: Z Algorithm (Find Indices)
+### **CE2 – Question 1: Rabin–Karp (Count)**
 
-**Problem:** Same as CE1 pattern matching - find and print all indices.
+**Problem:** Count how many times the pattern occurs in text.
+
+#### ✅ Code:
 
 ```cpp
 #include <bits/stdc++.h>
 using namespace std;
 int main() {
-    string t, p; getline(cin, t); getline(cin, p);
-    size_t pos = t.find(p);
-    while (pos != string::npos) {
-        cout << "Pattern found at index " << pos << endl;
-        pos = t.find(p, pos + 1);
+    string t, p;
+    getline(cin, t);
+    getline(cin, p);
+    int count = 0;
+    for (size_t i = 0; i + p.size() <= t.size(); ++i)
+        if (t.substr(i, p.size()) == p)
+            count++;
+    cout << count << '\n';
+}
+```
+
+#### 🧠 Walkthrough:
+
+* Same as above but increments counter instead of printing.
+* Outputs **total number of matches**.
+
+**Example:**
+`t = "hello hello world hello"`, `p = "hello"` → `3`
+
+---
+
+### **CE2 – Question 2: Rabin–Karp (Find Indices)**
+
+#### ✅ Code:
+
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+int main() {
+    string t, p;
+    getline(cin, t);
+    getline(cin, p);
+    vector<int> indices;
+    for (size_t i = 0; i + p.size() <= t.size(); ++i)
+        if (t.substr(i, p.size()) == p)
+            indices.push_back(i);
+    if (indices.empty()) cout << -1 << '\n';
+    else {
+        for (int i = 0; i < indices.size(); i++) {
+            if (i) cout << ' ';
+            cout << indices[i];
+        }
+        cout << '\n';
     }
 }
 ```
 
-**Detailed Walkthrough:**
-- Identical to CE1 Question 1
-- Find all pattern occurrences and print each index
+#### 🧠 Walkthrough:
+
+* Stores indices in vector.
+* Prints them space-separated.
+* If no match → prints `-1`.
+
+**Example:**
+`t = "aaaaa"`, `p = "aa"` → `0 1 2 3`
 
 ---
 
-### MCQs for Topic 4: String Algorithms
+### **CE3 – Question 1: Z Algorithm (Count)**
 
-**Q1:** What is commonly used as the base value (d) in the hash function for Rabin-Karp?
-- **Answer: 256**
+**Problem:** Multiple test cases, count matches each time.
 
-**Q2:** The naive pattern searching algorithm is an in place algorithm.
-- **Answer: True**
+#### ✅ Code:
 
-**Q3:** What is a Rabin and Karp Algorithm?
-- **Answer: String Matching Algorithm**
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+int main() {
+    int T; cin >> T;
+    while (T--) {
+        int N, M; cin >> N >> M;
+        string S, P; cin >> S >> P;
+        int count = 0;
+        for (size_t i = 0; i + P.size() <= S.size(); ++i)
+            if (S.substr(i, P.size()) == P)
+                count++;
+        cout << count << '\n';
+    }
+}
+```
 
-**Q4:** Who created the Rabin Karp Algorithm?
-- **Answer: Richard Karp and Michael Rabin**
+#### 🧠 Walkthrough:
 
-**Q5:** What does the Rabin-Karp algorithm do if the length of the pattern is greater than the length of the text?
-- **Answer: It immediately returns no matches found**
-
-**Q6:** What is the worst-case running time of the Rabin Karp Algorithm?
-- **Answer: Theta((n-m+1)m)**
-
-**Q7:** If the expected number of valid shifts is small and modulus is larger than the length of pattern what is the matching time of Rabin Karp Algorithm?
-- **Answer: Big-Oh(n+m)**
-
-**Q8:** What is the basic formula applied in Rabin Karp Algorithm to get the computation time as Theta(m)?
-- **Answer: Horner's rule**
-
-**Q9:** What is the basic principle in Rabin Karp algorithm?
-- **Answer: Hashing**
-
-**Q10:** What is the time complexity of Z algorithm for pattern searching (m = length of text, n = length of pattern)?
-- **Answer: O(n + m)**
-
-**Q11:** What is the pre-processing time of Rabin and Karp Algorithm?
-- **Answer: Theta(m)**
-
-**Q12:** In the Rabin-Karp algorithm, what role does the hash function play?
-- **Answer: It computes a hash value for the pattern and substrings to enable quick comparisons**
-
-**Q13:** What is the auxiliary space complexity of Z algorithm for pattern searching (m = length of text, n = length of pattern)?
-- **Answer: O(m + n)**
-
-**Q14:** What is the total complexity of NAIVE-STRING-MATCHER?
-- **Answer: O(n-m+1)**
-
-**Q15:** How does the Rabin-Karp algorithm handle hash collisions when multiple substrings have the same hash value?
-- **Answer: It uses a secondary verification step to compare substrings that have the same hash value**
+* Handles multiple test cases.
+* Loops through all possible substrings and counts matches.
+* Prints count for each test case.
 
 ---
 
-## TOPIC 5: STRING ALGORITHMS 2
+### **CE3 – Question 2: Z Algorithm (Find Indices)**
 
-### CE1 - Question 1: Shortest Palindrome (KMP)
+(Same as CE1)
 
-**Problem:** Find shortest palindrome by adding characters to beginning of string.
+#### ✅ Code:
 
-**Input Format:**
-- Line 1: String `s`
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+int main() {
+    string t, p;
+    getline(cin, t);
+    getline(cin, p);
+    for (size_t i = 0; i + p.size() <= t.size(); ++i)
+        if (t.substr(i, p.size()) == p)
+            cout << "Pattern found at index " << i << '\n';
+}
+```
 
-**Output Format:**
-- Line 1: Shortest palindrome string
+---
+
+### **MCQs for Topic 4**
+
+| Q  | Question                  | Answer                       |
+| -- | ------------------------- | ---------------------------- |
+| 1  | Base (d) in Rabin–Karp    | 256                          |
+| 2  | Naive algorithm in-place? | True                         |
+| 3  | Rabin–Karp is a...?       | String Matching Algorithm    |
+| 4  | Creators                  | Richard Karp & Michael Rabin |
+| 5  | Pattern longer than text? | No matches                   |
+| 6  | Worst-case time           | Θ((n−m+1)m)                  |
+| 7  | Expected small shifts     | O(n+m)                       |
+| 8  | Formula to get Θ(m)       | Horner’s rule                |
+| 9  | Core principle            | Hashing                      |
+| 10 | Z-algo time               | O(n+m)                       |
+| 11 | Preprocessing in RK       | Θ(m)                         |
+| 12 | Role of hash              | Quick compare                |
+| 13 | Space of Z                | O(m+n)                       |
+| 14 | Complexity of Naive       | O(n−m+1)                     |
+| 15 | Collision handling        | Compare substrings           |
+
+---
+
+## 🧠 **TOPIC 5 — STRING ALGORITHMS 2**
+
+---
+
+### **CE1 – Question 1: Shortest Palindrome**
+
+#### ✅ Code:
 
 ```cpp
 #include <bits/stdc++.h>
@@ -1229,145 +1152,97 @@ using namespace std;
 bool isPal(string s) { string r = s; reverse(r.begin(), r.end()); return s == r; }
 int main() {
     string s; cin >> s;
-    int n = s.length(), i = n;
-    for (i = n; i > 0; i--)
+    int n = s.size(), i;
+    for (i = n; i > 0; --i)
         if (isPal(s.substr(0, i))) break;
-    
-    string toAdd = s.substr(i);
-    reverse(toAdd.begin(), toAdd.end());
-    cout << toAdd + s << endl;
+    string add = s.substr(i);
+    reverse(add.begin(), add.end());
+    cout << add + s << '\n';
 }
 ```
 
-**Detailed Walkthrough:**
-1. Read input string `s`
-2. **Find longest palindromic prefix:**
-   - Check substrings from full length down to 1
-   - For each length i from n to 1:
-     - Check if s.substr(0, i) is palindrome
-     - If yes, this is longest palindromic prefix, break
-3. **Build shortest palindrome:**
-   - Remaining suffix = s.substr(i) (non-palindromic part)
-   - Reverse this suffix
-   - Prepend reversed suffix to original string
-4. **Why this works:** Adding reversed suffix makes entire string palindromic
+#### 🧠 Walkthrough:
 
-**Example:** s="aacecaaa"
-- Longest palindromic prefix: "aacecaa" (length 7)
-- Remaining suffix: "a"
-- Reversed suffix: "a"
-- Result: "a" + "aacecaaa" = "aaacecaaa"
+* Checks each prefix from end → start.
+* Finds longest palindrome prefix.
+* Reverses remaining suffix and adds in front.
+
+**Example:**
+`s = "aacecaaa"` → Output = `"aaacecaaa"`
 
 ---
 
-### CE1 - Question 2: KMP Pattern Search
+### **CE1 – Question 2: KMP Pattern Search**
 
-**Problem:** Standard pattern matching with "Found pattern" message.
+#### ✅ Code:
 
 ```cpp
 #include <bits/stdc++.h>
 using namespace std;
 int main() {
-    string t, p; getline(cin, t); getline(cin, p);
-    size_t pos = t.find(p);
-    while (pos != string::npos) {
-        cout << "Found pattern at index " << pos << endl;
-        pos = t.find(p, pos + 1);
-    }
+    string t, p;
+    getline(cin, t);
+    getline(cin, p);
+    for (size_t i = 0; i + p.size() <= t.size(); ++i)
+        if (t.substr(i, p.size()) == p)
+            cout << "Found pattern at index " << i << '\n';
 }
 ```
 
-**Detailed Walkthrough:**
-- Same as Topic 4 CE1, but with "Found pattern" instead of "Pattern found"
-- Find all occurrences and print indices
-
 ---
 
-### CE2 - Question 1: Longest Palindromic Substring (Manacher's)
+### **CE2 – Question 1: Longest Palindromic Substring (Expand Around Center)**
 
-**Problem:** Find longest palindromic substring using expand-around-center approach.
-
-**Input Format:**
-- Line 1: Integer `T` (test cases)
-- Next `T` lines: One string per line
-
-**Output Format:**
-- For each test case: longest palindromic substring
+#### ✅ Code:
 
 ```cpp
 #include <bits/stdc++.h>
 using namespace std;
 string getPal(string s) {
-    if (s.empty()) return "";
-    int n = s.length(), start = 0, maxL = 1;
+    int n = s.size(), start = 0, maxL = 1;
     for (int i = 0; i < n; i++) {
         int l = i, r = i;
         while (l >= 0 && r < n && s[l] == s[r]) {
-            if (r - l + 1 > maxL) { maxL = r - l + 1; start = l; }
+            if (r - l + 1 > maxL) { start = l; maxL = r - l + 1; }
             l--; r++;
         }
         l = i; r = i + 1;
         while (l >= 0 && r < n && s[l] == s[r]) {
-            if (r - l + 1 > maxL) { maxL = r - l + 1; start = l; }
+            if (r - l + 1 > maxL) { start = l; maxL = r - l + 1; }
             l--; r++;
         }
     }
     return s.substr(start, maxL);
 }
 int main() {
-    int t; cin >> t;
-    while(t--) {
+    int T; cin >> T;
+    while (T--) {
         string s; cin >> s;
-        cout << getPal(s) << endl;
+        cout << getPal(s) << '\n';
     }
 }
 ```
 
-**Detailed Walkthrough:**
-1. Read number of test cases
-2. **For each test case:**
-   - Read string
-   - Call getPal function
-   - Print result
-3. **getPal function (Expand Around Center):**
-   - Handle empty string edge case
-   - For each position i (potential center):
-     - **Odd-length palindromes:** Expand with center at i
-       - Start with l=i, r=i
-       - While characters match: expand outward (l--, r++)
-       - Track longest palindrome found
-     - **Even-length palindromes:** Expand with center between i and i+1
-       - Start with l=i, r=i+1
-       - While characters match: expand outward
-       - Track longest palindrome found
-   - Return substring from stored start position with maxLength
-
-**Example:** s="abaca"
-- At i=1: expand "b" → no expansion
-- At i=2: expand "a" → "aba" (length 3)
-- Result: "aba"
-
 ---
 
-### CE2 - Question 2: Longest Palindromic Substring (Numeric)
+### **CE2 – Question 2: Same (Single String Input)**
 
-**Problem:** Same algorithm without test case wrapper.
+#### ✅ Code:
 
 ```cpp
 #include <bits/stdc++.h>
 using namespace std;
 string getPal(string s) {
-    if (s.empty()) return "";
-    int n = s.length(), start = 0, maxL = 1;
+    int n = s.size(), start = 0, maxL = 1;
     for (int i = 0; i < n; i++) {
         int l = i, r = i;
         while (l >= 0 && r < n && s[l] == s[r]) {
-            if (r - l + 1 > maxL) { maxL = r - l + 1; start = l; }
+            if (r - l + 1 > maxL) { start = l; maxL = r - l + 1; }
             l--; r++;
         }
         l = i; r = i + 1;
         while (l >= 0 && r < n && s[l] == s[r]) {
-            if (r - l + 1 > maxL) { maxL = r - l + 1; start = l; }
+            if (r - l + 1 > maxL) { start = l; maxL = r - l + 1; }
             l--; r++;
         }
     }
@@ -1375,120 +1250,84 @@ string getPal(string s) {
 }
 int main() {
     string s; cin >> s;
-    cout << getPal(s) << endl;
+    cout << getPal(s) << '\n';
 }
 ```
 
-**Detailed Walkthrough:**
-- Identical expand-around-center logic
-- Single input string without test case loop
-
 ---
 
-### CE3 - Question 1: Boyer-Moore (Count)
+### **CE3 – Question 1: Boyer–Moore (Count)**
 
-**Problem:** Count pattern occurrences using find.
+#### ✅ Code:
 
 ```cpp
 #include <bits/stdc++.h>
 using namespace std;
 int main() {
-    string t, p; getline(cin, t); getline(cin, p);
+    string t, p;
+    getline(cin, t);
+    getline(cin, p);
     int c = 0;
-    size_t pos = t.find(p);
-    while (pos != string::npos) {
-        c++;
-        pos = t.find(p, pos + 1);
-    }
-    cout << c << endl;
+    for (size_t i = 0; i + p.size() <= t.size(); ++i)
+        if (t.substr(i, p.size()) == p)
+            c++;
+    cout << c << '\n';
 }
 ```
 
-**Detailed Walkthrough:**
-- Standard counting algorithm
-- Find all occurrences and increment counter
-
 ---
 
-### CE3 - Question 2: Boyer-Moore (Reverse Count)
+### **CE3 – Question 2: Boyer–Moore (Reverse Count)**
 
-**Problem:** Count occurrences of reversed pattern in text.
+#### ✅ Code:
 
 ```cpp
 #include <bits/stdc++.h>
 using namespace std;
 int main() {
-    string t, p; getline(cin, t); getline(cin, p);
+    string t, p;
+    getline(cin, t);
+    getline(cin, p);
     reverse(p.begin(), p.end());
     int c = 0;
-    size_t pos = t.find(p);
-    while (pos != string::npos) {
-        c++;
-        pos = t.find(p, pos + 1);
-    }
-    cout << c << endl;
+    for (size_t i = 0; i + p.size() <= t.size(); ++i)
+        if (t.substr(i, p.size()) == p)
+            c++;
+    cout << c << '\n';
 }
 ```
 
-**Detailed Walkthrough:**
-1. Read text and pattern
-2. **Reverse pattern:** Use `reverse(p.begin(), p.end())`
-3. Count occurrences of reversed pattern in text
-4. Print count
-
-**Example:** text="desserts are often stressed over", pattern="stressed"
-- Reverse pattern: "desserts"
-- Find "desserts" in text at position 0
-- Output: 1
+**Example:**
+`t = "desserts are often stressed over"`, `p = "stressed"`
+→ reversed pattern `"desserts"` → found once → output `1`
 
 ---
 
-### MCQs for Topic 5: String Algorithms 2
+## 🧩 **TOPIC 5 — STRING ALGORITHMS (Part 2) MCQs**
 
-**Q1:** What is the main purpose of Manacher's Algorithm?
-- **Answer: To find the longest palindromic substring in linear time**
+| No. | Question                                                                           | Options                                                                                     | ✅ Correct Answer | 💡 Explanation                                               |
+| :-: | :--------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------ | :--------------- | :----------------------------------------------------------- |
+|  1  | What is the time complexity of **KMP** algorithm?                                  | (A) O(n²) (B) O(n+m) (C) O(mn log n) (D) O(n³)                                              | **(B) O(n+m)**   | KMP preprocesses pattern in O(m) and searches in O(n).       |
+|  2  | What is the purpose of the **LPS (Longest Prefix Suffix)** array in KMP?           | (A) To store hash (B) To avoid re-comparison (C) To store substrings (D) None               | **(B)**          | LPS helps skip redundant checks after mismatch.              |
+|  3  | In **Manacher’s Algorithm**, time complexity is?                                   | (A) O(n²) (B) O(n log n) (C) O(n) (D) O(n³)                                                 | **(C)**          | Manacher finds longest palindromic substring in linear time. |
+|  4  | The **Naive palindrome check** method’s time complexity is?                        | (A) O(n) (B) O(n²) (C) O(n³) (D) O(log n)                                                   | **(B)**          | For each center, expand → O(n²).                             |
+|  5  | Which of the following finds **longest palindromic substring** efficiently?        | (A) KMP (B) Z (C) Manacher (D) Rabin–Karp                                                   | **(C)**          | Manacher is designed for that in O(n).                       |
+|  6  | The **Boyer–Moore** algorithm uses which main heuristic?                           | (A) Prefix function (B) Bad character rule (C) Rolling hash (D) Binary search               | **(B)**          | It skips using bad character and good suffix rules.          |
+|  7  | **Good Suffix Heuristic** is part of which algorithm?                              | (A) KMP (B) Boyer–Moore (C) Z (D) Rabin–Karp                                                | **(B)**          | Boyer–Moore uses both “bad character” and “good suffix”.     |
+|  8  | Which algorithm is the **fastest for single pattern search** in general case?      | (A) Naive (B) KMP (C) Boyer–Moore (D) Z                                                     | **(C)**          | Boyer–Moore can skip large portions, faster in practice.     |
+|  9  | The **Z-Algorithm** is mostly used for?                                            | (A) Pattern search (B) Sorting (C) Counting vowels (D) Hashing                              | **(A)**          | It computes Z-array to find occurrences of pattern.          |
+|  10 | If `pattern = “abcab”`, LPS array is?                                              | (A) [0,0,0,1,2] (B) [0,1,0,2,1] (C) [1,2,3,4,5] (D) [0,0,1,2,3]                             | **(A)**          | Prefix-suffix match gives `[0,0,0,1,2]`.                     |
+|  11 | Boyer–Moore compares pattern characters from:                                      | (A) Left to right (B) Right to left (C) Random (D) Middle to end                            | **(B)**          | It matches pattern from rightmost side first.                |
+|  12 | In KMP, preprocessing of pattern takes:                                            | (A) O(n) (B) O(m) (C) O(1) (D) O(m²)                                                        | **(B)**          | Preprocessing = O(m), searching = O(n).                      |
+|  13 | The **Z array** for string “aaaaa” is?                                             | (A) [0,4,3,2,1] (B) [0,1,2,3,4] (C) [1,2,3,4,5] (D) [0,5,5,5,5]                             | **(A)**          | Because “aaaaa”: full overlap lengths decrease by 1.         |
+|  14 | Which algorithm does **not** use preprocessing of pattern?                         | (A) KMP (B) Boyer–Moore (C) Naive (D) Rabin–Karp                                            | **(C)**          | Naive compares directly without preprocessing.               |
+|  15 | Manacher’s algorithm is useful when?                                               | (A) Multiple patterns (B) Longest palindrome search (C) Pattern matching (D) Hash collision | **(B)**          | Finds longest palindromic substring efficiently.             |
+|  16 | Which one uses **hashing** for matching?                                           | (A) KMP (B) Rabin–Karp (C) Z (D) BM                                                         | **(B)**          | Rabin–Karp uses rolling hash for matches.                    |
+|  17 | Boyer–Moore worst case time?                                                       | (A) O(n+m) (B) O(nm) (C) O(n) (D) O(log n)                                                  | **(B)**          | In rare cases, e.g., repeated characters, O(nm).             |
+|  18 | KMP and Z algorithm both achieve what time?                                        | (A) O(n²) (B) O(n+m) (C) O(n³) (D) O(log n)                                                 | **(B)**          | Both linear in combined input size.                          |
+|  19 | For pattern “aaa”, text “aaaaaa”, number of matches (including overlap)?           | (A) 2 (B) 3 (C) 4 (D) 6                                                                     | **(C)**          | Matches at positions 0,1,2,3 → 4 total.                      |
+|  20 | Which algorithm is **best for exact string matching** with many repeated patterns? | (A) KMP (B) Boyer–Moore (C) Rabin–Karp (D) Aho–Corasick                                     | **(D)**          | Aho–Corasick handles multiple patterns efficiently.          |
 
-**Q2:** What is the worst-case running time in the searching phase of Boyer-Moore's algorithm?
-- **Answer: O(mn)**
-
-**Q3:** The Boyer-Moore algorithm is particularly efficient when
-- **Answer: The pattern contains repetitive elements**
-
-**Q4:** What is the time complexity of Manacher's Algorithm?
-- **Answer: O(N)**
-
-**Q5:** What is the primary goal of string-matching algorithms?
-- **Answer: To find the occurrence of a specific pattern within a text**
-
-**Q6:** The Boyer-Moore algorithm uses which two rules to determine the shift amount?
-- **Answer: Good suffix rule and bad character rule**
-
-**Q7:** What is the time complexity of the KMP pattern searching algorithm in the worst case?
-- **Answer: O(n + m)**
-
-**Q8:** What does KMP stand for in the context of pattern-searching algorithms?
-- **Answer: Knuth Morris Pratt**
-
-**Q9:** Which String Matching Algorithm is based on the concept of shifting the pattern to the right by the Maximum Possible Distance when a mismatch occurs?
-- **Answer: Boyer-Moore**
-
-**Q10:** In the context of string matching, what is a 'pattern'?
-- **Answer: A sequence of characters to be searched**
-
-**Q11:** The Knuth-Morris-Pratt algorithm is efficient for pattern matching when
-- **Answer: The pattern is shorter than the text**
-
-**Q12:** What character shift tables does Boyer-Moore's search algorithm use?
-- **Answer: both good and bad character shift tables**
-
-**Q13:** What is the best-case time complexity of the Boyer-Moore Pattern Matching algorithm?
-- **Answer: O(n/m)**
-
-**Q14:** Which of the following pattern-matching algorithms is based on the concept of "bad character rule"?
-- **Answer: Boyer-Moore algorithm**
-
-**Q15:** Which of the following algorithms formed the basis for the Quick search algorithm?
-- **Answer: Boyer-Moore**
 
 ---
 
