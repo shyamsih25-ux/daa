@@ -508,22 +508,19 @@ int main() {
 #include <bits/stdc++.h>
 using namespace std;
 int main() {
-    int n; cin >> n;
-    priority_queue<int> h;
-    int a = 2, b = 3;
+    int n, sum = 0; 
+    cin >> n;
+    vector<int> heap; // this will store the heap
     for (int i = 1; i <= n; i++) {
-        int cur;
-        if (i == 1) cur = a;
-        else if (i == 2) cur = b;
-        else { cur = a + b; a = b; b = cur; }
-        
-        h.push(cur);
-        cout << "Insert " << cur << ": ";
-        auto h2 = h;
-        while (!h2.empty()) { cout << h2.top() << " "; h2.pop(); }
-        cout << endl;
+        heap.push_back(i);             
+        push_heap(heap.begin(), heap.end()); 
+        sum += i;
     }
+    for (int x : heap) cout << x << " ";
+    cout << "\n" << sum;
+    return 0;
 }
+
 ```
 
 **Detailed Walkthrough:**
@@ -565,12 +562,22 @@ int main() {
 #include <bits/stdc++.h>
 using namespace std;
 int main() {
-    int n, sum = 0; cin >> n;
-    priority_queue<int> h;
-    for (int i = 1; i <= n; i++) { h.push(i); sum += i; }
-    auto h2 = h;
-    while (!h2.empty()) { cout << h2.top() << " "; h2.pop(); }
-    cout << endl << sum << endl;
+    int n; 
+    cin >> n;
+    vector<int> heap;
+    int a = 2, b = 3;
+    for (int i = 1; i <= n; i++) {
+        int cur;
+        if (i == 1) cur = a;
+        else if (i == 2) cur = b;
+        else { cur = a + b; a = b; b = cur; }
+        heap.push_back(cur);
+        push_heap(heap.begin(), heap.end()); // maintain max heap
+        cout << "Insert " << cur << ": ";
+        for (int x : heap) cout << x << " ";
+        cout << endl;
+    }
+    return 0;
 }
 ```
 
