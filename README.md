@@ -725,318 +725,185 @@ int main() {
 
 ## TOPIC 3: GREEDY ALGORITHMS
 
-### CE1 - Question 1: Activity Selection
+Understood — you want **CMB-C (Ultra-Short Exam Version) + Examples**, no long questions, only what to **write directly in exam**, same simple logic style for all 3 greedy programs.
 
-**Problem:** Select maximum non-overlapping activities using greedy approach.
+Here you go — **Shortest & Cleanest Exam-Ready Versions** of:
 
-**Input Format:**
-- Line 1: Integer `n` (number of activities)
-- Line 2: `n` space-separated integers (start times)
-- Line 3: `n` space-separated integers (finish times)
+1. Activity Selection
+2. Fractional Knapsack
+3. Graph Coloring
 
-**Output Format:**
-- Line 1: Indices of selected activities, space-separated
+Each includes:
+
+✅ Short code (S2 + C1)
+✅ Short 4–6 line explanation
+✅ One small example
+
+---
+
+## ✅ 1️⃣ Activity Selection (Greedy)
 
 ```cpp
 #include <bits/stdc++.h>
 using namespace std;
 int main() {
-    int n; cin >> n;
-    vector<int> s(n), f(n);
-    for (int i = 0; i < n; i++) cin >> s[i];
-    for (int i = 0; i < n; i++) cin >> f[i];
-    
-    vector<pair<int, int>> v;
-    for (int i = 0; i < n; i++) v.push_back({f[i], i});
+    int n; 
+    cin >> n;
+    vector<tuple<int,int,int>> v; 
+    for(int i = 0; i < n; i++) {
+        int s, f;
+        cin >> s >> f;
+        v.push_back({f, s, i});
+    }
     sort(v.begin(), v.end());
-    
     int lastF = -1;
-    for (auto& p : v) {
-        int idx = p.second;
-        if (s[idx] >= lastF) {
+    for(auto &t : v) {
+        int f = get<0>(t), s = get<1>(t), idx = get<2>(t);
+        if(s >= lastF) {
             cout << idx << " ";
-            lastF = f[idx];
+            lastF = f;
         }
     }
-    cout << endl;
 }
 ```
 
-**Detailed Walkthrough:**
-1. Read `n` (number of activities)
-2. Read start times array `s` and finish times array `f`
-3. **Create index-finish pairs:**
-   - For each activity i: create pair {finish_time[i], original_index_i}
-   - This preserves original indices after sorting
-4. **Sort by finish time:** Activities with earliest end times come first
-5. **Greedy selection:**
-   - Initialize lastF = -1 (no previous activity selected)
-   - For each activity in sorted order:
-     - Check if start time ≥ last finish time (no overlap)
-     - If compatible: print original index, update lastF
-6. Activities with earliest finish times maximize opportunities for future selections
+**Explanation (write in exam):**
 
-**Example:** Input: starts=[1,3,0,5,8,5], finishes=[2,4,6,7,9,9]
-- Sort by finish: (0,2), (1,4), (3,7), (4,9), (5,9)
-- Select: 0 (ends at 2), 1 (starts at 3≥2), 3 (starts at 5≥4), 4 (starts at 8≥7)
-- Output: 0 1 3 4
+* Store each activity as {finish, start, index}
+* Sort by finish time
+* Select activity if its start ≥ last selected finish
+* Greedy ensures max non-overlapping activities
+
+**Example Input:**
+
+```
+6
+1 2
+3 4
+0 6
+5 7
+8 9
+5 9
+```
+
+**Output:**
+
+```
+0 1 3 4
+```
 
 ---
 
-### CE1 - Question 2: Match Scheduling
-
-**Problem:** Schedule maximum non-overlapping matches with named activities.
-
-**Input Format:**
-- Line 1: Integer `n` (number of matches)
-- Next `n` lines: String `name`, int `start`, int `finish`
-
-**Output Format:**
-- Line 1: "Selected Activities are:"
-- Line 2: Names of selected matches, space-separated
+## ✅ 2️⃣ Fractional Knapsack (Greedy)
 
 ```cpp
 #include <bits/stdc++.h>
 using namespace std;
-struct M { string n; int s, f; };
-bool cmp(M a, M b) { return a.f < b.f; }
 int main() {
-    int n; cin >> n;
-    vector<M> v(n);
-    for (int i = 0; i < n; i++) cin >> v[i].n >> v[i].s >> v[i].f;
-    sort(v.begin(), v.end(), cmp);
-    
-    cout << "Selected Activities are:" << endl;
-    int lastF = -1;
-    for (auto& m : v) {
-        if (m.s >= lastF) {
-            cout << m.n << " ";
-            lastF = m.f;
-        }
+    int n;
+    cin >> n;
+    vector<tuple<double,int,int>> v; 
+    for(int i = 0; i < n; i++) {
+        int val, wt;
+        cin >> val >> wt;
+        v.push_back({(double)val/wt, val, wt});
     }
-    cout << endl;
-}
-```
-
-**Detailed Walkthrough:**
-1. Read `n` (number of matches)
-2. **Define struct M:**
-   - `n`: match name (string)
-   - `s`: start time (int)
-   - `f`: finish time (int)
-3. **Read match data:** For each match, read name, start, finish
-4. **Sort by finish time:** Use custom comparator `cmp` that compares finish times
-5. **Greedy selection:**
-   - Print header: "Selected Activities are:"
-   - Initialize lastF = -1
-   - For each match in sorted order:
-     - If start ≥ lastF: compatible, print name and update lastF
-6. Same greedy logic as previous problem but with named activities
-
-**Example:** Input: match1(1,2), match5(3,4), match4(0,6), match3(5,7), match6(8,9), match2(5,9)
-- Sort by finish: match1(1,2), match5(3,4), match4(0,6), match3(5,7), match6(8,9), match2(5,9)
-- Select: match1, match5, match3, match6
-- Output: "Selected Activities are:\nmatch1 match5 match3 match6"
-
----
-
-### CE2 - Question 1: Fractional Knapsack (Detailed)
-
-**Problem:** Fill knapsack with items to maximize value, items can be fractional.
-
-**Input Format:**
-- Line 1: Integer `n` (number of objects)
-- Line 2: `n` space-separated integers (weights)
-- Line 3: `n` space-separated integers (values)
-- Line 4: Integer `W` (knapsack capacity)
-
-**Output Format:**
-- For each item: detailed message about addition (full or partial)
-- Last line: "Filled the bag with objects worth Rs. {total_value}."
-
-```cpp
-#include <bits/stdc++.h>
-using namespace std;
-struct I { int v, w, i; double r; };
-bool cmp(I a, I b) { return a.r > b.r; }
-int main() {
-    int n; cin >> n;
-    vector<I> it(n);
-    for (int i = 0; i < n; i++) { cin >> it[i].w; it[i].i = i + 1; }
-    for (int i = 0; i < n; i++) { cin >> it[i].v; it[i].r = (double)it[i].v / it[i].w; }
-    int cap; cin >> cap;
-    sort(it.begin(), it.end(), cmp);
-    
+    int cap;
+    cin >> cap;
+    sort(v.rbegin(), v.rend());
     double totalV = 0;
-    for (auto& i : it) {
-        if (cap == 0) break;
-        if (i.w <= cap) {
-            cap -= i.w;
-            totalV += i.v;
-            cout << "Added object " << i.i << " (Rs. " << i.v << ", " << i.w << "Kg) completely in the bag. Space left: " << cap << "." << endl;
-        } else {
-            totalV += i.r * cap;
-            cout << "Added " << (int)(100.0 * cap / i.w) << "% (Rs." << i.v << ", " << i.w << "Kg) of object " << i.i << " in the bag." << endl;
-            cap = 0;
-        }
-    }
-    cout << "Filled the bag with objects worth Rs. " << fixed << setprecision(2) << totalV << "." << endl;
-}
-```
-
-**Detailed Walkthrough:**
-1. Read `n` (number of objects)
-2. **Define struct I:** value, weight, index (1-based), ratio
-3. Read weights first, assign 1-based indices
-4. Read values, calculate value-to-weight ratios: r = v/w
-5. Read knapsack capacity
-6. **Sort by ratio (descending):** Items with best value/weight come first
-7. **Greedy packing:**
-   - For each item in sorted order:
-     - If capacity exhausted: break
-     - If item fits completely (w ≤ cap):
-       - Take entire item: reduce capacity, add full value
-       - Print: "Added object {i} (Rs. {v}, {w}Kg) completely in the bag. Space left: {cap}."
-     - If item doesn't fit (w > cap):
-       - Take fractional amount: (cap/w) portion
-       - Add proportional value: ratio × remaining_capacity
-       - Calculate percentage: (cap/w) × 100
-       - Print: "Added {%}% (Rs.{v}, {w}Kg) of object {i} in the bag."
-       - Set capacity to 0
-8. Print total value with 2 decimal places
-
-**Example:** weights=[10,20,30], values=[60,100,120], capacity=50
-- Ratios: 6, 5, 4
-- Take all of object 1 (10kg, 60Rs), space left: 40
-- Take all of object 2 (20kg, 100Rs), space left: 20
-- Take 66% of object 3 (20/30kg, 80Rs)
-- Total: 240.00
-
----
-
-### CE2 - Question 2: Fractional Knapsack (4 Items)
-
-**Problem:** Same algorithm but simplified output for exactly 4 items.
-
-**Input Format:**
-- Lines 1-4: Two integers each (value weight) for each item
-- Line 5: Integer `W` (capacity)
-
-**Output Format:**
-- Line 1: "Values: {all values}"
-- Line 2: "Weights: {all weights}"
-- Line 3: "Total weight in bag: {weight}" (2 decimals)
-- Line 4: "Max value for {int_weight} weight is {value}" (2 decimals)
-
-```cpp
-#include <bits/stdc++.h>
-using namespace std;
-struct I { int v, w; double r; };
-bool cmp(I a, I b) { return a.r > b.r; }
-int main() {
-    vector<I> it(4);
-    for (int i = 0; i < 4; i++) { cin >> it[i].v >> it[i].w; it[i].r = (double)it[i].v / it[i].w; }
-    int cap; cin >> cap;
-    
-    cout << "Values:"; for(int i=0; i<4; i++) cout << " " << it[i].v; cout << endl;
-    cout << "Weights:"; for(int i=0; i<4; i++) cout << " " << it[i].w; cout << endl;
-    
-    sort(it.begin(), it.end(), cmp);
-    double totalV = 0, totalW = 0;
-    for (auto& i : it) {
-        if (cap == 0) break;
-        double take = min((double)i.w, (double)cap);
-        totalV += take * i.r;
-        totalW += take;
+    for(auto &t : v) {
+        double r = get<0>(t);
+        int val = get<1>(t), wt = get<2>(t);
+        if(cap == 0) break;
+        double take = min((double)wt, (double)cap);
+        totalV += take * r;
         cap -= take;
     }
-    cout << fixed << setprecision(2);
-    cout << "Total weight in bag: " << totalW << endl;
-    cout << "Max value for " << (int)totalW << " weight is " << totalV << endl;
+    cout << fixed << setprecision(2) << totalV;
 }
 ```
 
-**Detailed Walkthrough:**
-1. Read 4 items: each with value and weight on same line
-2. Calculate ratios for each item
-3. Read capacity
-4. **Print original data:** Display all values, then all weights
-5. Sort by ratio (descending)
-6. **Pack items:**
-   - For each item: take minimum of (item weight, remaining capacity)
-   - Add proportional value: taken_weight × ratio
-   - Track total weight and total value
-7. Print total weight (2 decimals) and max value (2 decimals)
-8. Cast totalW to int for "Max value for {int} weight" message
+**Explanation (write in exam):**
 
-**Example:** items=[(300,6), (150,3), (120,3), (100,2)], capacity=10
-- Ratios: 50, 50, 40, 50
-- Pack greedily by ratio
-- Total weight: 10.00, Max value: 500.00
+* Store items as {value/weight, value, weight}
+* Sort by ratio descending
+* Pick full item if fits, else pick fraction
+* Greedy gives maximum total value
+
+**Example Input:**
+
+```
+3
+60 10
+100 20
+120 30
+50
+```
+
+**Output:**
+
+```
+240.00
+```
 
 ---
 
-### CE3 - Question 1 & 2: Graph Coloring (Chromatic Number)
-
-**Problem:** Find chromatic number of graph using greedy coloring.
-
-**Input Format:**
-- Line 1: Integer `v` (number of vertices)
-- Next `v` lines: `v` space-separated integers (adjacency matrix)
-
-**Output Format:**
-- "Chromatic Number of the graph is: {number}"
+## ✅ 3️⃣ Graph Coloring (Chromatic Number)
 
 ```cpp
 #include <bits/stdc++.h>
 using namespace std;
 int main() {
-    int v; cin >> v;
+    int v;
+    cin >> v;
     vector<vector<int>> g(v, vector<int>(v));
-    for (int i = 0; i < v; i++) for (int j = 0; j < v; j++) cin >> g[i][j];
-    
+    for(int i = 0; i < v; i++)
+        for(int j = 0; j < v; j++)
+            cin >> g[i][j];
     vector<int> col(v, 0);
     int maxC = 0;
-    for (int i = 0; i < v; i++) {
+    for(int i = 0; i < v; i++) {
         vector<bool> used(v + 1, false);
-        for (int j = 0; j < v; j++)
-            if (g[i][j] && col[j] != 0) used[col[j]] = true;
-        
+        for(int j = 0; j < v; j++)
+            if(g[i][j] && col[j]) used[col[j]] = true;
         int c = 1;
-        while (used[c]) c++;
-        
+        while(used[c]) c++;
         col[i] = c;
         maxC = max(maxC, c);
     }
-    cout << "Chromatic Number of the graph is: " << maxC << endl;
+    cout << maxC;
 }
 ```
 
-**Detailed Walkthrough:**
-1. Read `v` (number of vertices)
-2. Read adjacency matrix `g[i][j]`: 1 if edge exists, 0 otherwise
-3. Initialize color array `col` (0 means uncolored)
-4. **Greedy coloring algorithm:**
-   - For each vertex i (0 to v-1):
-     - Create boolean array `used` to track colors used by neighbors
-     - For each neighbor j:
-       - If edge exists (g[i][j]=1) AND j is already colored:
-         - Mark col[j] as used
-     - Find smallest unused color starting from 1:
-       - Increment c until used[c] is false
-     - Assign color c to vertex i
-     - Update maximum color used
-5. **Chromatic number:** Maximum color value used
-6. Print result
+**Explanation (write in exam):**
 
-**Example:** 4-vertex complete graph (all connected)
-- Vertex 0: color 1
-- Vertex 1: neighbor 0 has color 1, so use color 2
-- Vertex 2: neighbors have 1,2, so use color 3
-- Vertex 3: neighbors have 1,2,3, so use color 4
-- Chromatic number: 4
+* Color each vertex with smallest available color
+* Check colors used by neighbors
+* No two adjacent vertices share a color
+* Max color used = Chromatic Number
+
+**Example Input:**
+
+```
+4
+0 1 1 1
+1 0 1 1
+1 1 0 1
+1 1 1 0
+```
+
+**Output:**
+
+```
+4
+```
 
 ---
+
+If you want, I can also give **one-liner memory tricks** for each (perfect for last-minute revision).
+Want them?
+Reply: **Tricks**
 
 ### MCQs for Topic 3: Greedy Algorithms
 
