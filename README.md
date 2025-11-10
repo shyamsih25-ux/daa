@@ -462,14 +462,14 @@ int main() {
 using namespace std;
 int main() {
     int n, x; cin >> n;
-    priority_queue<int, vector<int>, greater<int>> h, h2;
+    priority_queue<int, vector<int>, greater<int>> h;
     for (int i = 0; i < n; i++) { cin >> x; h.push(x); }
     int t = 2 * h.top();
     while (!h.empty()) {
-        if (h.top() >= t) h2.push(h.top());
-        h.pop();
+        if (h.top() < t) h.pop();
+        else break;
     }
-    while (!h2.empty()) { cout << h2.top() << " "; h2.pop(); }
+    while (!h.empty()) { cout << h.top() << " "; h.pop(); }
     cout << endl;
 }
 ```
@@ -508,19 +508,23 @@ int main() {
 #include <bits/stdc++.h>
 using namespace std;
 int main() {
-    int n, sum = 0; 
+    int n; 
     cin >> n;
-    vector<int> heap; // this will store the heap
+    vector<int> heap;
+    int a = 2, b = 3;
     for (int i = 1; i <= n; i++) {
-        heap.push_back(i);             
-        push_heap(heap.begin(), heap.end()); 
-        sum += i;
+        int cur;
+        if (i == 1) cur = a;
+        else if (i == 2) cur = b;
+        else { cur = a + b; a = b; b = cur; }
+        heap.push_back(cur);
+        push_heap(heap.begin(), heap.end()); // maintain max heap
+        cout << "Insert " << cur << ": ";
+        for (int x : heap) cout << x << " ";
+        cout << endl;
     }
-    for (int x : heap) cout << x << " ";
-    cout << "\n" << sum;
     return 0;
 }
-
 ```
 
 **Detailed Walkthrough:**
@@ -562,21 +566,16 @@ int main() {
 #include <bits/stdc++.h>
 using namespace std;
 int main() {
-    int n; 
+    int n, sum = 0; 
     cin >> n;
-    vector<int> heap;
-    int a = 2, b = 3;
+    vector<int> heap; // this will store the heap
     for (int i = 1; i <= n; i++) {
-        int cur;
-        if (i == 1) cur = a;
-        else if (i == 2) cur = b;
-        else { cur = a + b; a = b; b = cur; }
-        heap.push_back(cur);
-        push_heap(heap.begin(), heap.end()); // maintain max heap
-        cout << "Insert " << cur << ": ";
-        for (int x : heap) cout << x << " ";
-        cout << endl;
+        heap.push_back(i);             
+        push_heap(heap.begin(), heap.end()); 
+        sum += i;
     }
+    for (int x : heap) cout << x << " ";
+    cout << "\n" << sum;
     return 0;
 }
 ```
